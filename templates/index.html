@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Netflix Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"/>
+    <style>
+        body { padding: 2em; background-color: #181818; color: #fff; }
+        .ui.header, h1 { color: #e50914 !important; }
+        .charts { display: flex; gap: 2em; }
+        .ui.table { font-size: 0.95em; background: #222 !important; color: #fff; }
+        .ui.table thead { background-color: #e50914 !important; color: #fff !important; }
+        .ui.input input { background: #222; color: #fff; border: 1px solid #e50914; }
+        .ui.button.primary { background-color: #e50914; color: #fff; }
+        label { color: #e50914; }
+        select, option { color: #222; }
+        .ui.form .field>label { color: #e50914; }
+    </style>
+</head>
+<body>
+    <h1 class="ui header"><i class="video icon"></i>Netflix Content Dashboard</h1>
+
+    <form class="ui form" method="POST" action="/">
+        <div class="fields">
+            <div class="field">
+                <label>Filter by Content Type</label>
+                <select name="content_type" class="ui dropdown" onchange="this.form.submit()">
+                    {% for ctype in content_types %}
+                        <option value="{{ ctype }}" {% if ctype == selected_type %}selected{% endif %}>
+                            {{ ctype }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="field">
+                <label>Search Title</label>
+                <div class="ui input">
+                    <input type="text" name="search_title" value="{{ search_title|default('') }}" placeholder="e.g. Stranger Things" onkeypress="if(event.keyCode==13){this.form.submit();}">
+                </div>
+            </div>
+            <div class="field" style="align-self: flex-end;">
+                <button class="ui button primary" type="submit" style="margin-top:1.5em;">Apply</button>
+            </div>
+        </div>
+    </form>
+    <br>
+
+    <div class="charts">
+        <div>
+            <h3>Top 10 Directors</h3>
+            <table class="ui celled table">
+                <thead>
+                    <tr>
+                        <th>Director</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for director, count in top_directors %}
+                    <tr>
+                        <td>{{ director }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <h3>Top 10 Countries</h3>
+            <table class="ui celled table">
+                <thead>
+                    <tr>
+                        <th>Country</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for country, count in top_countries %}
+                    <tr>
+                        <td>{{ country }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <h3>Top 10 Actors</h3>
+            <table class="ui celled table">
+                <thead>
+                    <tr>
+                        <th>Actor</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for actor, count in top_actors %}
+                    <tr>
+                        <td>{{ actor }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
